@@ -26,8 +26,8 @@ public class PurchaseOrderProcessService {
     @Autowired
     private PurchaseOrderRepository purchaseOrderRepository;
 
-    @RetryableTopic(attempts = "3", backoff = @Backoff(delay=1000,multiplier = 1.5), dltTopicSuffix = ".po-release-app-310-DLT")
-    @KafkaListener(topics = "PO-310", groupId = "po-release-app-310")
+    @RetryableTopic(attempts = "5", backoff = @Backoff(delay = 5000, multiplier = 1.5), dltTopicSuffix = ".DLT")
+    @KafkaListener( topics = "${kafka.topic.po310}", groupId = "${kafka.group-id.po310}")
     public void processPurchaseOrder(String purchaseOrder, Acknowledgment ack){
 
         ObjectMapper mapper = new ObjectMapper();
