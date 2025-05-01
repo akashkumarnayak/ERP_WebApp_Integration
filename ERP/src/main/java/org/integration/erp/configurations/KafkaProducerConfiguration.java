@@ -5,6 +5,7 @@ package org.integration.erp.configurations;
 //import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.integration.erp.dtos.PoKafkaPayloadDto;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -47,6 +48,11 @@ public class KafkaProducerConfiguration {
 
     @Bean
     public IProducer<PurchaseOrder> poProducer() {
+        return new KafkaProducer<>(kafkaTemplate());
+    }
+
+    @Bean
+    public IProducer<PoKafkaPayloadDto> poPayloadProducer() {
         return new KafkaProducer<>(kafkaTemplate());
     }
 

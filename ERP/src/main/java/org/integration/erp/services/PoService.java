@@ -1,5 +1,6 @@
 package org.integration.erp.services;
 
+import org.integration.erp.dtos.PoKafkaPayloadDto;
 import org.integration.erp.entities.Organization;
 import org.integration.erp.entities.PurchaseOrder;
 import org.integration.erp.entities.ReleaseStatus;
@@ -29,7 +30,7 @@ public class PoService {
     private OrganizationService organizationService;
 
     @Autowired
-    private IProducer<PurchaseOrder> kafkaProducer;
+    private IProducer<PoKafkaPayloadDto> kafkaProducer;
 
     public PurchaseOrder updatePoStatus(PurchaseOrder po) throws PurchaseOrderAlreadyReleasedException
     {
@@ -61,7 +62,17 @@ public class PoService {
             po.setOrg(org);
 
         PurchaseOrder savedPo = poRepository.save(po);
-        kafkaProducer.sendMessage(poProducerTopic, savedPo);
+        PoKafkaPayloadDto payloadDto = new PoKafkaPayloadDto();
+
+        payloadDto.setPoNumber(po.getPoNumber());
+        payloadDto.setUserName(po.getUser().getUsername());
+        payloadDto.setType(po.getType());
+        payloadDto.setStatus(po.getStatus());
+        payloadDto.setStrategy(po.getStrategy());
+        payloadDto.setReleaseGroup(po.getReleaseGroup());
+        payloadDto.setOrg(po.getOrg());
+
+        kafkaProducer.sendMessage(poProducerTopic, payloadDto);
         return savedPo;
     }
 }
