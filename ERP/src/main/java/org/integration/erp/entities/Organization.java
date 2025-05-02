@@ -1,5 +1,6 @@
 package org.integration.erp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class Organization {
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 

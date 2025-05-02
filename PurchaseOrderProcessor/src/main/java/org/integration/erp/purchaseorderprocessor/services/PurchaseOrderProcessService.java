@@ -26,7 +26,7 @@ public class PurchaseOrderProcessService {
     @Autowired
     private PurchaseOrderRepository purchaseOrderRepository;
 
-    @RetryableTopic(attempts = "5", backoff = @Backoff(delay = 5000, multiplier = 1.5), dltTopicSuffix = ".DLT")
+    @RetryableTopic(attempts = "5", backoff = @Backoff(delay = 5000, multiplier = 1.5), dltTopicSuffix = "-${kafka.group-id.po310}.DLT")
     @KafkaListener( topics = "${kafka.topic.po310}", groupId = "${kafka.group-id.po310}")
     public void processPurchaseOrder(String purchaseOrder, Acknowledgment ack){
 
